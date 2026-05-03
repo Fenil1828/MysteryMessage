@@ -128,8 +128,8 @@ export default function Home() {
               }}
             >
               {/* Mobile: all one line flow */}
-              <span className="sm:hidden">
-                Speak freely,{' '}
+              <span className="sm:hidden text-5xl">
+                Speak freely<br />
                 stay{' '}
                 <em className="not-italic relative inline-block text-amber-600">
                   anonymous
