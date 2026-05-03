@@ -85,6 +85,7 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.GOOGLE_CLIENT_ID || '',
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
       allowDangerousEmailAccountLinking: true,
+      callbackUrl: 'https://mystery-message-virid-seven.vercel.app/api/auth/callback/google',
     }),
     CredentialsProvider({
       id: 'credentials',
@@ -124,6 +125,12 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
+    async redirect({ url, baseUrl }) {
+      // Allow redirect if it's on the same origin or explicitly allowed
+      if (url.startsWith('/')) return `${baseUrl}${url}`;
+      if (url.startsWith(baseUrl)) return url;
+      return `${baseUrl}/dashboard`;
+    },
     async signIn({ user, account }) {
       if (account?.provider === 'google') {
         try {
