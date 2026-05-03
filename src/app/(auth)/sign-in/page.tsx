@@ -179,51 +179,24 @@ export default function SignInForm() {
   // };
 
   const onSubmit = async (data: z.infer<typeof signInSchema>) => {
-  setIsLoading(true);
-  
-  try {
-    const result = await signIn('credentials', {
-      redirect: false,
-      identifier: data.identifier,
-      password: data.password,
-    });
-
-    if (result?.error) {
-      if (result.error === 'CredentialsSignin') {
-        toast({
-          title: 'Login Failed',
-          description: 'Incorrect username or password',
-          variant: 'destructive',
-        });
-      } else {
-        toast({
-          title: 'Error',
-          description: result.error,
-          variant: 'destructive',
-        });
-      }
-    } else {
-      // Show success message
-      toast({
-        title: 'Success',
-        description: 'Signed in successfully!',
+    setIsLoading(true);
+    
+    try {
+      const result = await signIn('credentials', {
+        redirect: true,
+        identifier: data.identifier,
+        password: data.password,
+        callbackUrl: '/dashboard',
       });
-      
-      // Force redirect after a small delay
-      setTimeout(() => {
-        router.replace('/dashboard');
-      }, 100);
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'An unexpected error occurred',
+        variant: 'destructive',
+      });
+      setIsLoading(false);
     }
-  } catch (error) {
-    toast({
-      title: 'Error',
-      description: 'An unexpected error occurred',
-      variant: 'destructive',
-    });
-  } finally {
-    setIsLoading(false);
-  }
-};
+  };
 
 
   return (

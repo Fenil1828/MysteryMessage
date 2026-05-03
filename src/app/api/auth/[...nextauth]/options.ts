@@ -79,13 +79,20 @@ import bcrypt from 'bcryptjs';
 import dbConnect from '@/lib/dbConnect';
 import UserModel from '@/model/User';
 
+// Get base URL from environment or use hardcoded production URL for testing
+const getBaseUrl = () => {
+  // Hardcoded for production testing
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  if (process.env.NEXTAUTH_URL) return process.env.NEXTAUTH_URL;
+  return 'https://mystery-message-virid-seven.vercel.app';
+};
+
 export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID || '',
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
       allowDangerousEmailAccountLinking: true,
-      callbackUrl: 'https://mystery-message-virid-seven.vercel.app/api/auth/callback/google',
     }),
     CredentialsProvider({
       id: 'credentials',
@@ -126,9 +133,14 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async redirect({ url, baseUrl }) {
-      // Allow redirect if it's on the same origin or explicitly allowed
-      if (url.startsWith('/')) return `${baseUrl}${url}`;
-      if (url.startsWith(baseUrl)) return url;
+      // Always redirect to dashboard after login
+      if (url.startsWith('/')) {
+        return `${baseUrl}${url}`;
+      }
+      // If it's an external URL, only allow same domain
+      if (new URL(url).origin === new URL(baseUrl).origin) {
+        return url;
+      }
       return `${baseUrl}/dashboard`;
     },
     async signIn({ user, account }) {
@@ -165,7 +177,6 @@ export const authOptions: NextAuthOptions = {
           return true;
         } catch (error: any) {
           console.error('Error during Google sign-in:', error);
-          // Still return true to allow fallback
           return true;
         }
       }
@@ -194,6 +205,7 @@ export const authOptions: NextAuthOptions = {
     strategy: 'jwt',
   },
   secret: process.env.NEXTAUTH_SECRET,
+  basePath: '/api/auth',
   pages: {
     signIn: '/sign-in',
   },
