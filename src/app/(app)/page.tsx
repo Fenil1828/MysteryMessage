@@ -41,17 +41,16 @@ export default function Home() {
   ];
 
   const anim = (delay = 0) =>
-    `transition-all duration-700 ${delay ? `delay-[${delay}ms]` : ''} ${
+    `transition-all duration-700 ${
       visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'
     }`;
 
+  const getAnimStyle = (delay = 0) => ({
+    transitionDelay: delay ? `${delay}ms` : '0ms',
+  });
+
   return (
     <>
-      <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&display=swap"
-        rel="stylesheet"
-      />
-
       <div
         className="min-h-screen bg-[#faf8f4] text-stone-900 overflow-x-hidden"
         style={{ fontFamily: "'DM Sans', sans-serif" }}
@@ -110,7 +109,9 @@ export default function Home() {
     mb-5 sm:mb-9
     shadow-sm
     ${anim(0)}
-  `}>
+  `}
+              style={getAnimStyle(0)}
+            >
               <Sparkles size={9} className="sm:hidden" />
               <Sparkles size={11} className="hidden sm:block" />
               Your identity, always protected
@@ -123,6 +124,7 @@ export default function Home() {
                 fontFamily: "'Playfair Display', serif",
                 fontSize: 'clamp(2rem, 7.5vw, 5.5rem)',
                 lineHeight: 1.06,
+                transitionDelay: '100ms',
               }}
             >
               {/* Mobile: all one line flow */}
@@ -164,6 +166,7 @@ export default function Home() {
       mb-7 sm:mb-11
       ${anim(200)}
     `}
+              style={getAnimStyle(200)}
             >
               A refined space to send and receive honest messages — without the weight of identity.
               {/* Extra phrase hidden on tiny screens */}
@@ -178,7 +181,9 @@ export default function Home() {
     mb-8 sm:mb-14
     w-full max-w-[280px] sm:max-w-none
     ${anim(300)}
-  `}>
+  `}
+              style={getAnimStyle(300)}
+            >
               <Link
                 href="/sign-up"
                 className="
@@ -213,7 +218,8 @@ export default function Home() {
             </div>
 
             {/* Stats row */}
-            <div className={`flex items-center gap-5 sm:gap-10 md:gap-14 ${anim(400)}`}>
+            <div className={`flex items-center gap-5 sm:gap-10 md:gap-14 ${anim(400)}`}
+              style={getAnimStyle(400)}>
               {[
                 { num: '2.4M', label: 'Messages sent' },
                 { num: '100%', label: 'Anonymous' },

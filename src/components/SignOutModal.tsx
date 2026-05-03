@@ -7,8 +7,8 @@ import { LogOut, X } from 'lucide-react';
 interface SignOutModalProps {
   isOpen: boolean;
   onClose: () => void;
-  username?: string;
-  email?: string;
+  username?: string | null;
+  email?: string | null;
 }
 
 export function SignOutModal({ isOpen, onClose, username, email }: SignOutModalProps) {
