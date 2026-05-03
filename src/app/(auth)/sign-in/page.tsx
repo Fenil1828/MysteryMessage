@@ -278,7 +278,7 @@ export default function SignInForm() {
           type="button"
           onClick={() => {
             setIsGoogleLoading(true);
-            signIn('google', { callbackUrl: '/dashboard' });
+            signIn('google', { redirect: true, callbackUrl: '/dashboard' });
           }}
           disabled={isGoogleLoading}
           className="w-full flex items-center justify-center gap-2 sm:gap-3 px-4 py-2 sm:py-2.5 rounded-md border border-stone-200 bg-white text-stone-700 text-xs sm:text-sm font-medium transition-all duration-200 hover:bg-stone-50 hover:border-stone-300 hover:shadow-sm disabled:opacity-70 disabled:cursor-not-allowed"

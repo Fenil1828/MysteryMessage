@@ -126,8 +126,8 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async signIn({ user, account }) {
       if (account?.provider === 'google') {
-        await dbConnect();
         try {
+          await dbConnect();
           let existingUser = await UserModel.findOne({ email: user.email });
           
           if (!existingUser) {
@@ -146,17 +146,20 @@ export const authOptions: NextAuthOptions = {
             });
             
             user._id = newUser._id.toString();
-            user.username = username;
-            user.isVerified = true;
+            user.username = newUser.username;
+            user.isVerified = newUser.isVerified;
+            user.isAcceptingMessages = newUser.isAcceptingMessages;
           } else {
             user._id = existingUser._id.toString();
             user.username = existingUser.username;
             user.isVerified = existingUser.isVerified;
             user.isAcceptingMessages = existingUser.isAcceptingMessages;
           }
-        } catch (error) {
+          return true;
+        } catch (error: any) {
           console.error('Error during Google sign-in:', error);
-          return false;
+          // Still return true to allow fallback
+          return true;
         }
       }
       return true;
