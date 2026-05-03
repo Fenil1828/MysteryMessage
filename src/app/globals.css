@@ -1,6 +1,53 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Smooth Toast Animations */
+@layer utilities {
+  @keyframes slideInFromRight {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideOutToRight {
+    from {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+  }
+
+  .animate-slide-in-from-right {
+    animation: slideInFromRight 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .animate-slide-out-to-right {
+    animation: slideOutToRight 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  /* Smooth Loader Spinner */
+  @keyframes smoothSpin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .animate-smooth-spin {
+    animation: smoothSpin 1.2s linear infinite;
+  }
+}
  
 @layer base {
   :root {

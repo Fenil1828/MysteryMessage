@@ -44,7 +44,7 @@ const UserSchema: Schema<User> = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: [true, 'Password is required'],
+    required: false, // Optional for Google OAuth users
   },
   verifyCode: {
     type: String,
