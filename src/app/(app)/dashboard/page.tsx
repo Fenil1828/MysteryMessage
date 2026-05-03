@@ -70,7 +70,7 @@ function UserDashboard() {
         }
       } catch (error) {
         const axiosError = error as AxiosError<ApiResponse>;
-     toast({
+        toast({
           title: 'Error',
           description:
             axiosError.response?.data.message ?? 'Failed to fetch messages',
@@ -84,16 +84,12 @@ function UserDashboard() {
     [setIsLoading, setMessages, toast]
   );
 
-  // Fetch initial state from the server
   useEffect(() => {
     if (!session || !session.user) return;
-
     fetchMessages();
-
     fetchAcceptMessages();
   }, [session, setValue, toast, fetchAcceptMessages, fetchMessages]);
 
-  // Handle switch change
   const handleSwitchChange = async () => {
     try {
       const response = await axios.post<ApiResponse>('/api/accept-messages', {
@@ -134,33 +130,40 @@ function UserDashboard() {
   };
 
   return (
-    <div className="my-8 mx-4 md:mx-8 lg:mx-auto p-6 bg-white rounded w-full max-w-6xl">
-      <h1 className="text-4xl font-bold mb-4">User Dashboard</h1>
+    <div className="my-4 mx-auto p-4 md:p-6 bg-white rounded w-full max-w-6xl">
+      {/* ✅ Heading scaled for mobile */}
+      <h1 className="text-2xl md:text-4xl font-bold mb-4">User Dashboard</h1>
 
+      {/* ✅ URL box: stacks vertically on mobile */}
       <div className="mb-4">
-        <h2 className="text-lg font-semibold mb-2">Copy Your Unique Link</h2>{' '}
-        <div className="flex items-center">
+        <h2 className="text-base md:text-lg font-semibold mb-2">Copy Your Unique Link</h2>
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
           <input
             type="text"
             value={profileUrl}
             disabled
-            className="input input-bordered w-full p-2 mr-2"
+            className="input input-bordered w-full p-2 text-sm truncate min-w-0"
           />
-          <Button onClick={copyToClipboard}>Copy</Button>
+          {/* ✅ Button full-width on mobile, auto on larger */}
+          <Button onClick={copyToClipboard} className="w-full sm:w-auto shrink-0">
+            Copy
+          </Button>
         </div>
       </div>
 
-      <div className="mb-4">
+      {/* ✅ Switch row wraps cleanly */}
+      <div className="mb-4 flex items-center gap-2">
         <Switch
           {...register('acceptMessages')}
           checked={acceptMessages}
           onCheckedChange={handleSwitchChange}
           disabled={isSwitchLoading}
         />
-        <span className="ml-2">
+        <span className="text-sm md:text-base">
           Accept Messages: {acceptMessages ? 'On' : 'Off'}
         </span>
       </div>
+
       <Separator />
 
       <Button
@@ -177,9 +180,11 @@ function UserDashboard() {
           <RefreshCcw className="h-4 w-4" />
         )}
       </Button>
-      <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
+
+      {/* ✅ Grid: 1 col on mobile, 2 on md+ */}
+      <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
         {messages.length > 0 ? (
-          messages.map((message, index) => (
+          messages.map((message) => (
             <MessageCard
               key={message._id}
               message={message}
@@ -187,7 +192,7 @@ function UserDashboard() {
             />
           ))
         ) : (
-          <p>No messages to display.</p>
+          <p className="text-sm text-gray-500">No messages to display.</p>
         )}
       </div>
     </div>

@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Inter, Playfair_Display, DM_Sans } from 'next/font/google';
 import './globals.css';
 import AuthProvider from '../context/AuthProvider';
@@ -23,13 +23,22 @@ export const metadata: Metadata = {
   description: 'Real feedback from real people.',
 };
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  minimumScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  viewportFit: 'cover',
+};
+
 interface RootLayoutProps {
   children: React.ReactNode;
 }
 
 export default async function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="en" className={`${playfair.variable} ${dmSans.variable}`}>
+    <html lang="en" className={`overflow-x-hidden ${playfair.variable} ${dmSans.variable}`}>
       <AuthProvider>
         <body className={inter.className}>
           {children}

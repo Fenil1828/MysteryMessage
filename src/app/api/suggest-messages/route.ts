@@ -28,10 +28,8 @@ export async function POST(req: Request) {
         // If streaming: const stream = OpenAIStream(response); return new StreamingTextResponse(stream);
 
         console.log('Grok Success!'); // Debug log
-        return NextResponse.json({
-          success: true,
-          questions: response.choices[0].message.content,
-          source: 'grok-official'
+        return new NextResponse(response.choices[0].message.content, {
+          headers: { 'Content-Type': 'text/plain' },
         });
       } catch (grokError) {
         console.error('Grok API failed:', grokError); // Detailed error log
@@ -59,10 +57,8 @@ export async function POST(req: Request) {
         if (hfResponse.ok) {
           const data = await hfResponse.json();
           console.log('Hugging Face Success!'); // Debug log
-          return NextResponse.json({
-            success: true,
-            questions: data[0].generated_text.split('\n')[0], // Basic parsing; adjust as needed
-            source: 'huggingface'
+          return new NextResponse(data[0].generated_text.split('\n')[0], {
+            headers: { 'Content-Type': 'text/plain' },
           });
         }
       } catch (hfError) {
@@ -80,10 +76,8 @@ export async function POST(req: Request) {
 
     const randomQuestions = mockQuestions[Math.floor(Math.random() * mockQuestions.length)];
 
-    return NextResponse.json({
-      success: true,
-      questions: randomQuestions,
-      source: 'fallback'
+    return new NextResponse(randomQuestions, {
+      headers: { 'Content-Type': 'text/plain' },
     });
 
   } catch (error) {
