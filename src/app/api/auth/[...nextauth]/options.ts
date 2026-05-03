@@ -79,12 +79,11 @@ import bcrypt from 'bcryptjs';
 import dbConnect from '@/lib/dbConnect';
 import UserModel from '@/model/User';
 
-// Get base URL from environment or use hardcoded production URL for testing
+// Get base URL from environment
 const getBaseUrl = () => {
-  // Hardcoded for production testing
   if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
   if (process.env.NEXTAUTH_URL) return process.env.NEXTAUTH_URL;
-  return 'https://mystery-message-virid-seven.vercel.app';
+  return process.env.NEXTAUTH_URL || 'http://localhost:3000';
 };
 
 export const authOptions: NextAuthOptions = {
